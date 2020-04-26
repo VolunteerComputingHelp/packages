@@ -1,0 +1,16 @@
+Index: boinc-client_release-7.16-7.16.6/zip/Makefile.am
+===================================================================
+--- boinc-client_release-7.16-7.16.6.orig/zip/Makefile.am
++++ boinc-client_release-7.16-7.16.6/zip/Makefile.am
+@@ -72,6 +72,11 @@ else
+ LIBBOINC_ZIP_STATIC=libboinc_zip.${LIBEXT}
+ endif
+ 
++CFLAGS := $(shell echo $(CFLAGS)|sed -e 's/-Werror=[^ ]*//' -e 's/-D_FORTIFY_SOURCE=1//')
++CFLAGS += -U_FORTIFY_SOURCE -Wno-error
++CXXFLAGS := $(shell echo $(CXXFLAGS)|sed -e 's/-Werror=[^ ]*//' -e 's/-D_FORTIFY_SOURCE=1//')
++CXXFLAGS += -U_FORTIFY_SOURCE -Wno-error
++
+ 
+ all_local = $(LIBBOINC_ZIP_STATIC)
+ 

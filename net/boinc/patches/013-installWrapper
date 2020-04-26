@@ -1,0 +1,11 @@
+Index: boinc-client_release-7.16-7.16.6/samples/wrapper/Makefile
+===================================================================
+--- boinc-client_release-7.16-7.16.6.orig/samples/wrapper/Makefile
++++ boinc-client_release-7.16-7.16.6/samples/wrapper/Makefile
+@@ -39,3 +39,6 @@ REGEXP_OBJS = \
+ 
+ wrapper: wrapper.o libstdc++.a $(BOINC_LIB_DIR)/libboinc.a $(BOINC_API_DIR)/libboinc_api.a $(REGEXP_OBJS)
+ 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o wrapper wrapper.o $(REGEXP_OBJS) libstdc++.a $(PTHREAD) -lboinc_api -lboinc -lboinc_zip
++
++install: wrapper
++	@echo "*** Wrapper is not installed ***"

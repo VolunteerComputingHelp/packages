@@ -16,7 +16,8 @@ PKG_SOURCE_URL:=https://codeload.github.com/BOINC/boinc/tar.gz/client_release/$(
 PKG_HASH:=caa567da8d3eb50859efe2eeba1c23c7b27d3b0f15b548136e75302713b25303
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-client_release-$(PKG_VERSION_SHORT)-$(PKG_VERSION)
 
-PKG_MAINTAINER:=Christian Dreihsig <christian.dreihsig@t-online.de>, Steffen Moeller <moeller@debian.org>
+PKG_MAINTAINER:=Christian Dreihsig <christian.dreihsig@t-online.de> \
+                Steffen Moeller <moeller@debian.org>
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_LICENSE_FILES:=COPYING
 PKG_CPE_ID:=cpe:/a:boinc_project:boinc
@@ -28,13 +29,25 @@ PKG_FIXUP:=autoreconf
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/target.mk
 
+define Package/boinc/Default
+endef
+
 define Package/boinc
   SECTION:=net
   CATEGORY:=Network
+  URL:=https://github.com/BOINC/boinc/
+  USERID:=boinc:boinc
   TITLE:=BOINC client
   DEPENDS:=+curl +bzip2 +libstdcpp +libopenssl +zlib
-  USERID:=boinc:boinc
+endef
+
+define Package/boinc-app-wrapper
+  SECTION:=net
+  CATEGORY:=Network
   URL:=https://github.com/BOINC/boinc/
+  USERID:=boinc:boinc
+  TITLE:=BOINC wrapper application
+  DEPENDS:=+boinc
 endef
 
 define Package/boinc/description
@@ -53,8 +66,29 @@ define Package/boinc/description
   machine from the BOINC Manager of your desktop computer.
 endef
 
+define Package/boinc-app-wrapper/description
+  The Berkeley Open Infrastructure for Network Computing (BOINC) is a
+  software platform for distributed computing: several initiatives of
+  various scientific disciplines all compete for the idle time of
+  desktop computers. The developers' web site at the University of
+  Berkeley serves as a common portal to the otherwise independently run
+  projects.
+ 
+  This package may be used as a substitute of the app that would be
+  distributed by a few projects like Yoyo@Home. The wrapper knows
+  how to invoke other binaries, feed them with input, collect results
+  and submit them back to the respective BOINC project's server.
+  
+  To install this package will not harm the regular operation with
+  BOINC. You will need it only if explicitly instructed by the
+  BOINC project you are contributing to - or because you are a pro
+  and you are experimenting with something - like running your own
+  project, possibly.
+endef
+
 CONFIGURE_ARGS += \
 	--disable-server --disable-manager --enable-client --enable-libraries \
+	--enable-apps --enable-static \
 	--disable-boinczip --enable-install-headers --enable-dynamic-client-linkage \
 	--with-boinc-platform=$(REAL_GNU_TARGET_NAME) \
 	--with-boinc-alt-platform=$(ARCH)-$(BOARD)-$(DEVICE_TYPE)-openwrt-$(TARGET_SUFFIX)
@@ -80,4 +114,10 @@ define Package/boinc/install
 	$(CP) ./files/remote_hosts.cfg $(1)/usr/share/boinc/remote_hosts.cfg
 endef
 
+define Package/boinc-app-wrapper/install
+	$(INSTALL_DIR) $(1)/usr/lib/boinc/
+	$(CP) $(PKG_BUILD_DIR)/samples/wrapper/wrapper $(1)/usr/lib/boinc/
+endef
+
 $(eval $(call BuildPackage,boinc))
+$(eval $(call BuildPackage,boinc-app-wrapper))

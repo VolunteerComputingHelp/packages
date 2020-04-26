@@ -1,0 +1,11 @@
+Index: boinc-client_release-7.16-7.16.6/samples/Makefile.am
+===================================================================
+--- boinc-client_release-7.16-7.16.6.orig/samples/Makefile.am
++++ boinc-client_release-7.16-7.16.6/samples/Makefile.am
+@@ -3,5 +3,5 @@
+ include $(top_srcdir)/Makefile.incl
+ 
+ ## list the apps that should be build
+-SUBDIRS = condor example_app multi_thread sleeper vboxmonitor vboxwrapper worker wrapper
++SUBDIRS = worker wrapper
+ ## NOTE: nvcuda and wrappture need external libraries
